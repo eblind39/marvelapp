@@ -1,0 +1,2 @@
+export const PRIVATE_KEY = 'd75d114903aa3cf3386b2146b1aa574555a4632b';
+export const PUBLIC_KEY = '45a25817778990dd4f02aa0ffc241785';

@@ -1,0 +1,76 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/*---Custom-CSS---*/
+.character-card-default-height {
+    min-height: 58vh !important;
+    max-height: 58vh !important;
+}
+
+/* @media screen and (max-width:767px) {
+    .card-default-height {
+        margin: 0 auto !important;
+        display: table !important;
+    }
+} */
+
+.comic-card-default-height {
+  min-height: 65vh !important;
+  max-height: 65vh !important;
+}
+
+.limit-text-words {
+  width: auto;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 5;
+  overflow: hidden;
+}
+
+div.content {
+  margin: 0 auto !important
+}
+
+h2.ui.header {
+  color: invert(70%);
+}
+
+.active-opt-menu {
+  border: solid 1px #61dafb;
+}
