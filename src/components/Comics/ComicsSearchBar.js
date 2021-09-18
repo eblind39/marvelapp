@@ -1,9 +1,7 @@
-import React, { useState, useCallback, useRef, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Grid, Form, Input, Button, Select, Search } from "semantic-ui-react";
+import { Grid, Form, Input, Button, Select } from "semantic-ui-react";
 import { setComicFilters, fetchComics } from "../../redux/Comics/comicsActionCreators";
-// import { fetchComics } from "../../redux/Comics/comicsActionCreators";
-// import { fetchStories } from "../../redux/Stories/storiesActionCreators";
 
 function ComicsSearchBar(props) {
 	const [searchTitle, setSearchTitle] = useState("");

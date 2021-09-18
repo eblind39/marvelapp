@@ -169,6 +169,21 @@ export const fetchStoriesByCharacterId = (pageNumber, characterId) => (dispatch)
             .catch(error => dispatch(charactersFailed(error.message)));
 }
 
+export const addToFavorites = (charactersFavorites, character) => (dispatch) => {
+    console.log('addToFavorites', charactersFavorites, character);
+    let letFiltered = charactersFavorites.filter(item => item.id === character.id);
+    let localArr = (letFiltered.length > 0 ? [...charactersFavorites] : [...charactersFavorites, character]);
+    dispatch(setFavoritesArray(localArr));
+}
+export const removeFromFavorites = (charactersFavorites, characterId) => (dispatch) => {
+    let localArr = charactersFavorites.filter(item => item.id !== characterId);
+    dispatch(setFavoritesArray(localArr));
+}
+export const setFavoritesArray = (charactersFavorites) => ({
+    type: ActionTypes.CHARACTERS_SET_ARRAY_FAVORITES,
+    payload: charactersFavorites
+});
+
 export const incPageNumber = () => ({
     type: ActionTypes.CHARACTERS_INCREMENT_PAGE_NUMBER
 });

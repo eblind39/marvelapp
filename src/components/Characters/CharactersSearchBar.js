@@ -1,10 +1,7 @@
 import React, { useState, useCallback, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Grid, Form, Input, Button, Select, Search } from "semantic-ui-react";
-import {
-	setCharacterFilter,
-	fetchCharacters,
-} from "../../redux/Characters/charactersActionCreators";
+import { setCharacterFilter, fetchCharacters } from "../../redux/Characters/charactersActionCreators";
 import { fetchComics } from "../../redux/Comics/comicsActionCreators";
 import { fetchStories } from "../../redux/Stories/storiesActionCreators";
 
@@ -39,16 +36,17 @@ function CharactersSearchBar(props) {
 	};
 
 	// Start for comics autocomplete
-	const handleSearchComicsChange = useCallback((e, data) => {
+	const handleSearchComicsChange = (e, data) => {
 		clearTimeout(timeoutComicsRef.current);
-		dispatch(fetchComics(0, data.value, true));
+		// dispatch(fetchComics(0, data.value, true));
+		dispatch(fetchComics(0, data.value, null, null, true));
 
 		timeoutComicsRef.current = setTimeout(() => {
 			if (comicsAutoComplete.length === 0) {
 				return;
 			}
 		}, 300);
-	}, []);
+	};
 	React.useEffect(() => {
 		setOrderNameComboOpts([
 			{ key: '', value: '', text: '' },

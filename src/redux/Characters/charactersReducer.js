@@ -13,6 +13,7 @@ export const Characters = (state = {
                                         storiesPageNumber: 0,
                                         storiesTotalPages: 0,
                                         storiesTotalStories: 0,
+                                        charactersFavorites: [],
                                         pageNumber: 0,
                                         totalCharacters: 0,
                                         totalPages: 0,
@@ -71,13 +72,15 @@ export const Characters = (state = {
                                                 isLoading: false, 
                                                 errMes: null, 
                                                 characters: [], 
-                                                totalCharacters: 0, 
+                                                totalCharacters: 0,
                                                 totalPages: 0, 
                                                 characterName: action.characterName,
                                                 comicIdFilter: action.comicIdFilter,
                                                 storyIdFilter: action.storyIdFilter,
                                                 pageNumber: action.pageNumber
                                                }
+                                    case ActionTypes.CHARACTERS_SET_ARRAY_FAVORITES:
+                                        return { ...state, charactersFavorites: action.payload }
                                     default:
                                         return state;
                                }

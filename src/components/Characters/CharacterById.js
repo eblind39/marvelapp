@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchCharacterById, fetchComicsByCharacterId, fetchStoriesByCharacterId, setComicsPageNumber, setStoriesPageNumber } from '../../redux/Characters/charactersActionCreators';
 import { Container, Grid, Image, Card, Pagination, Header } from 'semantic-ui-react';
+import NavMenu from "../NavMenu/NavMenu";
+import CharactersBanner from "./CharactersBanner";
 
 function RenderCard({character, comics, comicsTotalPages, stories, storiesTotalPages}) {
     const dispatch = useDispatch();
@@ -13,11 +15,14 @@ function RenderCard({character, comics, comicsTotalPages, stories, storiesTotalP
             <Grid
                 container
                 centered
-                style={{ background: "orange", marginRight: "12px", paddingTop: "12px" }}
+                style={{ background: "orange", marginRight: "12px", marginTop: "12px" }}
                 columns={4}
                 divided
                 doubling
             >
+                <Grid.Row>
+                    <Header as="h1">Character details</Header>
+                </Grid.Row>
                 <Grid.Row>
                     <Grid.Column width={6}>
                         <Card>
@@ -50,7 +55,7 @@ function RenderCard({character, comics, comicsTotalPages, stories, storiesTotalP
                         <Header as='h2'>Comics</Header>
                         <Grid
                             columns={3}
-                            style={{ background: "#181a1b", marginRight: "6px" }}
+                            style={{ background: "#181a1b", color: "rgba(232, 230, 227, 0.87)", marginRight: "6px" }}
                             divided
                         >
                             {
@@ -91,7 +96,7 @@ function RenderCard({character, comics, comicsTotalPages, stories, storiesTotalP
                             }} 
                         />
                         :
-                        <p>No data. { storiesTotalPages }</p>
+                        <p>No data.</p>
                     }
                 </Grid.Row>
             </Grid>
@@ -108,7 +113,7 @@ function RenderCard({character, comics, comicsTotalPages, stories, storiesTotalP
                         <Header as='h2'>Stories</Header>
                         <Grid
                             columns={3}
-                            style={{ background: "#181a1b", marginRight: "6px" }}
+                            style={{ background: "#181a1b", color: "rgba(232, 230, 227, 0.87)", marginRight: "6px" }}
                             divided
                         >
                             {
@@ -119,7 +124,7 @@ function RenderCard({character, comics, comicsTotalPages, stories, storiesTotalP
                                         <Grid.Row>
                                             <Grid.Column width={4}>
                                                 {
-                                                    (srcImage==null || srcImage=="" || srcImage==undefined || srcImage=="undefined.undefined") 
+                                                    (srcImage===null || srcImage==="" || srcImage===undefined || srcImage==="undefined.undefined") 
                                                     ?
                                                         <Image src="/images/no-img.png" size="tiny" />
                                                     :
@@ -156,7 +161,7 @@ function RenderCard({character, comics, comicsTotalPages, stories, storiesTotalP
                             }}
                         />
                         :
-                        <p>No data. { storiesTotalPages }</p>
+                        <p>No data.</p>
                     }
                 </Grid.Row>
             </Grid>
@@ -185,12 +190,12 @@ function CharacterById(props) {
         dispatch(fetchCharacterById(characterId));
         dispatch(fetchComicsByCharacterId(0, characterId));
         dispatch(fetchStoriesByCharacterId(0, characterId));
-    }, [characterId]);
+    }, [characterId, dispatch]);
     
     return(
         <React.Fragment>
             { 
-                (character && comicsByCharacter && comicsTotalPages && storiesByCharacter && storiesTotalPages) &&
+                (character) &&
                 <RenderCard 
                         key={character.id}
                         character={character} 

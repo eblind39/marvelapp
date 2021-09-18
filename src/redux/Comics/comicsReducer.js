@@ -14,6 +14,7 @@ export const Comics = (state = {
                                         storiesPageNumber: 0,
                                         storiesTotalPages: 0,
                                         storiesTotalStories: 0,
+                                        comicsFavorites: [],
                                         pageNumber: 0,
                                         totalComics: 0,
                                         totalPages: 0,
@@ -87,6 +88,8 @@ export const Comics = (state = {
                                                 issueNumber: action.issueNumber,
                                                 pageNumber: action.pageNumber
                                                }
+                                    case ActionTypes.COMICS_SET_ARRAY_FAVORITES:
+                                        return { ...state, comicsFavorites: action.payload }
                                     default:
                                         return state;
                                }

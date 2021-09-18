@@ -3,28 +3,56 @@ import { useEffect, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from 'react-router-dom';
 import Loading from "../Loading/LoadingComponent";
-import { fetchComics, incPageNumber } from "../../redux/Comics/comicsActionCreators";
-import { Card, Image, Grid } from "semantic-ui-react";
+import { fetchComics, incPageNumber, addToFavorites, removeFromFavorites } from "../../redux/Comics/comicsActionCreators";
+import { setActiveMenu } from '../../redux/NavMenu/navmenuActionCreators';
+import * as MenuOptions from '../../data/navmenuOptions';
+import { Card, Image, Grid, Button, Icon } from "semantic-ui-react";
 
-function RenderCard({comic}) {
-        let srcImage = `${ comic.thumbnail.path }.${ comic.thumbnail.extension }`;
+function RenderCard({comic, comicsFavorites}) {
+    const [isComicInFavs, setIsComicInFavs] = useState(false);
+    const dispatch = useDispatch();
+    let srcImage = `${ comic.thumbnail.path }.${ comic.thumbnail.extension }`;
 
-        return (
-            <Card className="comic-card-default-height">
-                <Image as={Link} to={`/comics/${comic.id}`} src={ srcImage } wrapped ui={false} />
-                <Card.Content>
-                    <Card.Header>{ comic.name }</Card.Header>
-                    <Card.Meta>
-                    </Card.Meta>
-                    <Card.Description className="limit-text-words">
-                        { comic.description }
-                    </Card.Description>
-                </Card.Content>
-                <Card.Content centered extra>
-                    { comic.id }
-                </Card.Content>
-            </Card>
-        );
+    const toggleFavorites = function() {
+        console.log('toggleFavorites', isComicInFavs);
+        if (!isComicInFavs) {
+            dispatch(addToFavorites(comicsFavorites, comic));
+            setIsComicInFavs(true);
+        } else {
+            dispatch(removeFromFavorites(comicsFavorites, comic.id));
+            setIsComicInFavs(false);
+        }
+    }
+
+    useEffect(() => {
+        setIsComicInFavs(comicsFavorites ? comicsFavorites.includes(comic) : false);
+    }, [])
+
+    return (
+        <Card className="comic-card-default-height">
+            <Image as={Link} to={`/comics/${comic.id}`} src={ srcImage } wrapped ui={false} />
+            <Card.Content>
+                <Card.Header>{ comic.title }</Card.Header>
+                <Card.Meta>
+                </Card.Meta>
+                <Card.Description className="limit-text-words">
+                    { comic.description }
+                </Card.Description>
+            </Card.Content>
+            <Card.Content centered extra>
+                { comic.id }
+            </Card.Content>
+            <Button animated='vertical'>
+                <Button.Content hidden 
+                    onClick={toggleFavorites}>
+                    { isComicInFavs ? 'Remove from favorites' : 'Add to favorites' }
+                </Button.Content>
+                <Button.Content visible>
+                    <Icon name='heart' color={isComicInFavs ? "red" : "grey"} />
+                </Button.Content>
+            </Button>
+        </Card>
+    );
 }
 
 function ComicsList(props) {
@@ -34,6 +62,7 @@ function ComicsList(props) {
     const pageNumber = useSelector(state => state.comics.pageNumber);
     const comicTitle = useSelector(state => state.comics.comicTitle);
     const comics = useSelector(state => state.comics.comics);
+    const comicsFavorites = useSelector(state => state.comics.comicsFavorites);
     const totalPages = useSelector(state => state.comics.totalPages);
     const dispatch = useDispatch();
 
@@ -74,6 +103,10 @@ function ComicsList(props) {
     }, [lastElement]);
     // end infinite scroll
 
+    useEffect(() => {
+        dispatch(setActiveMenu(MenuOptions.comics));
+    }, []);
+
     if (comics.length === 0) {
         return (
             <Loading />
@@ -101,6 +134,7 @@ function ComicsList(props) {
                                             <RenderCard 
                                                 key={comic.id}
                                                 comic={comic} 
+                                                comicsFavorites={comicsFavorites}
                                                 isLoading={isLoading}
                                                 errMess={errMess}
                                             />
@@ -112,7 +146,8 @@ function ComicsList(props) {
                                     <Grid.Column>
                                         <RenderCard 
                                             key={comic.id}
-                                            comic={comic} 
+                                            comic={comic}
+                                            comicsFavorites={comicsFavorites}
                                             isLoading={isLoading}
                                             errMess={errMess}
                                         />
@@ -127,7 +162,7 @@ function ComicsList(props) {
                 {comics.length === 0 && <p>No data</p>}
 
                 {pageNumber - 1 === totalPages && (
-                    <p className='text-center my-10' style={{marginTop: '3em', zIndex: 899, color: '#9a0d2e'}}>No more data... ♥</p>
+                    <p className='text-center my-10' style={{marginTop: '3em', marginBottom: '3em', zIndex: 899, color: '#9a0d2e'}}>No more data... ♥</p>
                 )}
             </React.Fragment>
         );

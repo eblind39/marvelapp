@@ -2,32 +2,60 @@ import React, { useRef, useState } from "react";
 import { useEffect, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Loading from "../Loading/LoadingComponent";
-import { fetchCharacters, incPageNumber } from "../../redux/Characters/charactersActionCreators";
-import { Card, Image, Grid } from "semantic-ui-react";
+import { fetchCharacters, incPageNumber, addToFavorites, removeFromFavorites } from "../../redux/Characters/charactersActionCreators";
+import { setActiveMenu } from '../../redux/NavMenu/navmenuActionCreators';
+import * as MenuOptions from '../../data/navmenuOptions';
+import { Grid, Card, Image, Button, Icon } from "semantic-ui-react";
 import { Link } from 'react-router-dom';
 
-function RenderCard({character}) {
-        let srcImage = `${ character.thumbnail.path }.${ character.thumbnail.extension }`;
+function RenderCard({character, charactersFavorites}) {
+    const [isCharacterInFavs, setIsCharacterInFavs] = useState(false);
+    const dispatch = useDispatch();
+    let srcImage = `${ character.thumbnail.path }.${ character.thumbnail.extension }`;
 
-        return (
-            <Card className="character-card-default-height" style={{cursor: "pointer"}}>
-                <Image as={Link} to={`/characters/${character.id}`} src={ srcImage } wrapped ui={false} />
-                <Card.Content>
-                    <Card.Header>{ character.name }</Card.Header>
-                    <Card.Meta>
-                        <span className='date'>
-                            {new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'short', day: '2-digit'}).format(new Date(Date.parse(character.modified)))}
-                        </span>
-                    </Card.Meta>
-                    <Card.Description className="limit-text-words">
-                        { character.description }
-                    </Card.Description>
-                </Card.Content>
-                <Card.Content extra>
-                    { character.id }
-                </Card.Content>
-            </Card>
-        );
+    const toggleFavorites = function() {
+        if (!isCharacterInFavs) {
+            dispatch(addToFavorites(charactersFavorites, character));
+            setIsCharacterInFavs(true);
+        } else {
+            dispatch(removeFromFavorites(charactersFavorites, character.id));
+            setIsCharacterInFavs(false);
+        }
+    }
+
+    useEffect(() => {
+        setIsCharacterInFavs(charactersFavorites ? charactersFavorites.includes(character) : false);
+        dispatch(setActiveMenu(MenuOptions.characters));
+    }, [])
+
+    return (
+        <Card className="character-card-default-height" style={{cursor: "pointer"}}>
+            <Image as={Link} to={`/characters/${character.id}`} src={ srcImage } wrapped ui={false} />
+            <Card.Content>
+                <Card.Header>{ character.name }</Card.Header>
+                <Card.Meta>
+                    <span className='date'>
+                        {new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'short', day: '2-digit'}).format(new Date(Date.parse(character.modified)))}
+                    </span>
+                </Card.Meta>
+                <Card.Description className="limit-text-words">
+                    { character.description }
+                </Card.Description>
+            </Card.Content>
+            <Card.Content extra>
+                { character.id }
+            </Card.Content>
+            <Button animated='vertical'>
+                <Button.Content hidden 
+                    onClick={toggleFavorites}>
+                    { isCharacterInFavs ? 'Remove from favorites' : 'Add to favorites' }
+                </Button.Content>
+                <Button.Content visible>
+                    <Icon name='heart' color={isCharacterInFavs ? "red" : "grey"} />
+                </Button.Content>
+            </Button>
+        </Card>
+    );
 }
 
 function CharactersList(props) {
@@ -39,6 +67,7 @@ function CharactersList(props) {
     const comicIdFilter = useSelector(state => state.characters.comicIdFilter);
     const characters = useSelector(state => state.characters.characters);
     const totalPages = useSelector(state => state.characters.totalPages);
+    const charactersFavorites = useSelector(state => state.characters.charactersFavorites);
     const dispatch = useDispatch();
 
     const getCharacters = useCallback(() => {
@@ -105,7 +134,8 @@ function CharactersList(props) {
                                         <Grid.Column>
                                             <RenderCard 
                                                 key={character.id}
-                                                character={character} 
+                                                character={character}
+                                                charactersFavorites={charactersFavorites}
                                                 isLoading={isLoading}
                                                 errMess={errMess}
                                             />
@@ -118,6 +148,7 @@ function CharactersList(props) {
                                         <RenderCard 
                                             key={character.id}
                                             character={character} 
+                                            charactersFavorites={charactersFavorites}
                                             isLoading={isLoading}
                                             errMess={errMess}
                                         />
@@ -132,7 +163,7 @@ function CharactersList(props) {
                 {characters.length === 0 && <p>No data</p>}
 
                 {pageNumber - 1 === totalPages && (
-                    <p className='text-center my-10' style={{marginTop: '3em', zIndex: 899, color: '#9a0d2e'}}>No more data... ♥</p>
+                    <p className='text-center my-10' style={{marginTop: '3em', marginBottom: '3em', zIndex: 899, color: '#9a0d2e'}}>No more data... ♥</p>
                 )}
             </React.Fragment>
         );

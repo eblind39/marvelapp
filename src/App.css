@@ -1,3 +1,7 @@
+body {
+  background-color: rgb(24, 26, 27) !important;
+}
+
 .App {
   text-align: center;
 }
@@ -72,5 +76,21 @@ h2.ui.header {
 }
 
 .active-opt-menu {
-  border: solid 1px #61dafb;
+  color: #eb4034 !important;
+}
+.inactive-opt-menu {
+  color: #000000 !important;
+}
+
+.float-inside-image {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  left: 5px;
+  top: 5px;
+}
+
+.custom-font {
+  font-family: cursive !important;
+  font-size: 1.2em !important;
 }
