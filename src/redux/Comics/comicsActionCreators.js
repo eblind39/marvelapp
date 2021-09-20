@@ -174,13 +174,11 @@ export const fetchStoriesByComicId = (pageNumber, comicId) => (dispatch) => {
 }
 
 export const addToFavorites = (comicsFavorites, comic) => (dispatch) => {
-    console.log('addToFavorites', comicsFavorites, comic);
     let letFiltered = comicsFavorites.filter(item => item.id === comic.id);
     let localArr = (letFiltered.length > 0 ? [...comicsFavorites] : [...comicsFavorites, comic]);
     dispatch(setFavoritesArray(localArr));
 }
 export const removeFromFavorites = (comicsFavorites, comicId) => (dispatch) => {
-    console.log('removeFromFavorites', comicsFavorites, comicId);
     let localArr = comicsFavorites.filter(item => item.id !== comicId);
     dispatch(setFavoritesArray(localArr));
 }

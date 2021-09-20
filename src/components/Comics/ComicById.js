@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useHistory } from "react-router";
+import { Link } from "react-router-dom";
 import { fetchStoriesByComicId, fetchCharactersByComicId, fetchComicById, setStoriesPageNumber, setCharactersPageNumber } from '../../redux/Comics/comicsActionCreators';
-import { Container, Grid, Image, Card, Pagination, Header } from 'semantic-ui-react';
+import { Container, Grid, Image, Card, Pagination, Header, Button, Icon } from 'semantic-ui-react';
 import NavMenu from "../NavMenu/NavMenu";
 import ComicsBanner from "./ComicsBanner";
 
 function RenderCard({comic, characters, charactersTotalPages, stories, storiesTotalPages}) {
+    const history = useHistory();
     const dispatch = useDispatch();
 
     let srcImage = `${ comic?.thumbnail?.path }.${ comic?.thumbnail?.extension }`;
@@ -15,14 +18,30 @@ function RenderCard({comic, characters, charactersTotalPages, stories, storiesTo
             <Grid
                 container
                 centered
-                style={{ background: "orange", marginRight: "12px", paddingTop: "12px" }}
+                style={{ background: "orange", marginRight: "12px", marginTop: "12px" }}
                 columns={4}
                 divided
                 doubling
             >
-                <Grid.Row>
-                    <Header as="h1">Comic details</Header>
+                <Grid.Row
+                    style={{ background: "#181a1b", color: "rgba(232, 230, 227, 0.87)", margin: "12px" }}
+                >
+                    <Grid.Column width={6}>
+                        <Button
+                            as='div'
+                            labelPosition='right'
+                            onClick={(e) => { history.goBack(); }}>
+                            <Button icon>
+                                <Icon name='chevron left' />
+                                {' Back'}
+                            </Button>
+                        </Button>
+                    </Grid.Column>
+                    <Grid.Column width={10} centered style={{ margin: "0 auto" }}>
+                        <Header as="h1">Comic details</Header>
+                    </Grid.Column>
                 </Grid.Row>
+
                 <Grid.Row>
                     <Grid.Column width={6}>
                         <Card>
@@ -45,19 +64,37 @@ function RenderCard({comic, characters, charactersTotalPages, stories, storiesTo
             <Grid
                 container
                 centered
-                style={{ background: "orange", paddingLeft: "12px", marginTop: "12px" }}
+                style={{ background: "orange", paddingLeft: "12px", paddingBottom: "12px" }}
                 columns={1}
                 divided
                 doubling
             >
                 <Grid.Row>
                     <Grid.Column width={16}>
-                        <Header as='h2'>Characters</Header>
                         <Grid
                             columns={3}
                             style={{ background: "#181a1b", color: "rgba(232, 230, 227, 0.87)", marginRight: "6px" }}
                             divided
                         >
+                            <Grid.Row centered>
+                                <Header as='h2'>Characters</Header>
+                            </Grid.Row>
+                            {
+                                (characters.length > 0) &&
+                                <Grid.Row>
+                                    <Grid.Column width={4}></Grid.Column>
+                                    <Grid.Column width={4}>
+                                        <Container>
+                                            <Header as="h4">Name</Header>
+                                        </Container>
+                                    </Grid.Column>
+                                    <Grid.Column width={8}>
+                                        <Container>
+                                            <Header as="h4">Description</Header>
+                                        </Container>
+                                    </Grid.Column>
+                                </Grid.Row>
+                            }
                             {
                                 characters &&
                                 characters.map((character, index) => {
@@ -65,7 +102,7 @@ function RenderCard({comic, characters, charactersTotalPages, stories, storiesTo
                                     return (
                                         <Grid.Row>
                                             <Grid.Column width={4}>
-                                                <Image src={srcImage} size="tiny" />
+                                                <Image as={Link} to={`/characters/${character.id}`} src={ srcImage } size="tiny" />
                                             </Grid.Column>
                                             <Grid.Column width={4}>
                                                 <Container>
@@ -81,41 +118,59 @@ function RenderCard({comic, characters, charactersTotalPages, stories, storiesTo
                                     );
                                 })
                             }
+                            <Grid.Row centered>
+                                {
+                                    (characters.length > 0)
+                                    ?
+                                    <Pagination 
+                                        totalPages={charactersTotalPages ? charactersTotalPages : 1} 
+                                        onPageChange={(event, data) => {
+                                            dispatch(setCharactersPageNumber(data.activePage - 1)); 
+                                            dispatch(fetchCharactersByComicId(data.activePage - 1, comic.id)); 
+                                        }} 
+                                    />
+                                    :
+                                    <p>No data.</p>
+                                }
+                            </Grid.Row>
                         </Grid>
                     </Grid.Column>
-                </Grid.Row>
-                <Grid.Row>
-                    {
-                        (characters.length > 0)
-                        ?
-                        <Pagination 
-                            totalPages={charactersTotalPages ? charactersTotalPages : 1} 
-                            onPageChange={(event, data) => {
-                                dispatch(setCharactersPageNumber(data.activePage - 1)); 
-                                dispatch(fetchCharactersByComicId(data.activePage - 1, comic.id)); 
-                            }} 
-                        />
-                        :
-                        <p>No data.</p>
-                    }
                 </Grid.Row>
             </Grid>
             <Grid
                 container
                 centered
-                style={{ background: "orange", color: "rgba(232, 230, 227, 0.87)", paddingLeft: "12px", marginTop: "12px" }}
+                style={{ background: "orange", color: "rgba(232, 230, 227, 0.87)", paddingLeft: "12px", paddingBottom: "12px" }}
                 columns={1}
                 divided
                 doubling
             >
                 <Grid.Row>
                     <Grid.Column width={16}>
-                        <Header as='h2'>Stories</Header>
                         <Grid
                             columns={3}
                             style={{ background: "#181a1b", marginRight: "6px" }}
                             divided
                         >
+                            <Grid.Row centered>
+                                <Header as='h2'>Stories</Header>
+                            </Grid.Row>
+                            {
+                                (characters.length > 0) &&
+                                <Grid.Row>
+                                    <Grid.Column width={4}></Grid.Column>
+                                    <Grid.Column width={4}>
+                                        <Container>
+                                            <Header as="h4">Title</Header>
+                                        </Container>
+                                    </Grid.Column>
+                                    <Grid.Column width={8}>
+                                        <Container>
+                                            <Header as="h4">Description</Header>
+                                        </Container>
+                                    </Grid.Column>
+                                </Grid.Row>
+                            }
                             {
                                 stories &&
                                 stories.map((story, index) => {
@@ -146,23 +201,23 @@ function RenderCard({comic, characters, charactersTotalPages, stories, storiesTo
                                     );
                                 })
                             }
+                            <Grid.Row centered>
+                                {
+                                    (stories.length > 0)
+                                    ?
+                                    <Pagination 
+                                        totalPages={storiesTotalPages ? storiesTotalPages : 1 }
+                                        onPageChange={(event, data) => {
+                                            dispatch(setStoriesPageNumber(data.activePage - 1)); 
+                                            dispatch(fetchStoriesByComicId(data.activePage - 1, comic.id)); 
+                                        }}
+                                    />
+                                    :
+                                    <p>No data. { storiesTotalPages }</p>
+                                }
+                            </Grid.Row>
                         </Grid>
                     </Grid.Column>
-                </Grid.Row>
-                <Grid.Row>
-                    {
-                        (stories.length > 0)
-                        ?
-                        <Pagination 
-                            totalPages={storiesTotalPages ? storiesTotalPages : 1 }
-                            onPageChange={(event, data) => {
-                                dispatch(setStoriesPageNumber(data.activePage - 1)); 
-                                dispatch(fetchStoriesByComicId(data.activePage - 1, comic.id)); 
-                            }}
-                        />
-                        :
-                        <p>No data. { storiesTotalPages }</p>
-                    }
                 </Grid.Row>
             </Grid>
         </React.Fragment>

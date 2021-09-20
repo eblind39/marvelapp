@@ -43,8 +43,8 @@ body {
 
 /*---Custom-CSS---*/
 .character-card-default-height {
-    min-height: 58vh !important;
-    max-height: 58vh !important;
+    min-height: 550px !important;
+    max-height: 550px !important;
 }
 
 /* @media screen and (max-width:767px) {

@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchCharacterById, fetchComicsByCharacterId, fetchStoriesByCharacterId, setComicsPageNumber, setStoriesPageNumber } from '../../redux/Characters/charactersActionCreators';
-import { Container, Grid, Image, Card, Pagination, Header } from 'semantic-ui-react';
+import { Container, Grid, Image, Card, Pagination, Header, Button, Icon } from 'semantic-ui-react';
+import { useHistory } from "react-router";
+import { Link } from 'react-router-dom';
 import NavMenu from "../NavMenu/NavMenu";
 import CharactersBanner from "./CharactersBanner";
 
 function RenderCard({character, comics, comicsTotalPages, stories, storiesTotalPages}) {
+    const history = useHistory();
     const dispatch = useDispatch();
 
     let srcImage = `${ character?.thumbnail?.path }.${ character?.thumbnail?.extension }`;
@@ -20,8 +23,23 @@ function RenderCard({character, comics, comicsTotalPages, stories, storiesTotalP
                 divided
                 doubling
             >
-                <Grid.Row>
-                    <Header as="h1">Character details</Header>
+                <Grid.Row
+                    style={{ background: "#181a1b", color: "rgba(232, 230, 227, 0.87)", margin: "12px" }}
+                >
+                    <Grid.Column width={6}>
+                        <Button 
+                            as='div' 
+                            labelPosition='right'
+                            onClick={(e) => { history.goBack(); }}>
+                            <Button icon>
+                                <Icon name='chevron left' />
+                                {' Back'}
+                            </Button>
+                        </Button>
+                    </Grid.Column>
+                    <Grid.Column width={10} centered style={{ margin: "0 auto" }}>
+                        <Header as="h1">Character details</Header>
+                    </Grid.Column>
                 </Grid.Row>
                 <Grid.Row>
                     <Grid.Column width={6}>
@@ -52,12 +70,31 @@ function RenderCard({character, comics, comicsTotalPages, stories, storiesTotalP
             >
                 <Grid.Row>
                     <Grid.Column width={16}>
-                        <Header as='h2'>Comics</Header>
+                        
                         <Grid
                             columns={3}
                             style={{ background: "#181a1b", color: "rgba(232, 230, 227, 0.87)", marginRight: "6px" }}
                             divided
                         >
+                            <Grid.Row centered>
+                                <Header as='h2'>Comics</Header>
+                            </Grid.Row>
+                            {
+                                (comics.length > 0) &&
+                                <Grid.Row>
+                                    <Grid.Column width={4}></Grid.Column>
+                                    <Grid.Column width={4}>
+                                        <Container>
+                                            <Header as="h4">Title</Header>
+                                        </Container>
+                                    </Grid.Column>
+                                    <Grid.Column width={8}>
+                                        <Container>
+                                            <Header as="h4">Description</Header>
+                                        </Container>
+                                    </Grid.Column>
+                                </Grid.Row>
+                            }
                             {
                                 comics &&
                                 comics.map((comic, index) => {
@@ -65,7 +102,7 @@ function RenderCard({character, comics, comicsTotalPages, stories, storiesTotalP
                                     return (
                                         <Grid.Row>
                                             <Grid.Column width={4}>
-                                                <Image src={srcImage} size="tiny" />
+                                                <Image as={Link} to={`/comics/${comic.id}`} src={ srcImage } size="tiny" />
                                             </Grid.Column>
                                             <Grid.Column width={4}>
                                                 <Container>
@@ -81,23 +118,23 @@ function RenderCard({character, comics, comicsTotalPages, stories, storiesTotalP
                                     );
                                 })
                             }
+                            <Grid.Row centered>
+                                {
+                                    (comics.length > 0)
+                                        ?
+                                        <Pagination
+                                            totalPages={comicsTotalPages}
+                                            onPageChange={(event, data) => {
+                                                dispatch(setComicsPageNumber(data.activePage - 1));
+                                                dispatch(fetchComicsByCharacterId(data.activePage - 1, character.id));
+                                            }}
+                                        />
+                                        :
+                                        <p>No data.</p>
+                                }
+                            </Grid.Row>
                         </Grid>
                     </Grid.Column>
-                </Grid.Row>
-                <Grid.Row>
-                    {
-                        (comics.length > 0)
-                        ?
-                        <Pagination 
-                            totalPages={comicsTotalPages} 
-                            onPageChange={(event, data) => {
-                                dispatch(setComicsPageNumber(data.activePage - 1)); 
-                                dispatch(fetchComicsByCharacterId(data.activePage - 1, character.id)); 
-                            }} 
-                        />
-                        :
-                        <p>No data.</p>
-                    }
                 </Grid.Row>
             </Grid>
             <Grid
@@ -110,12 +147,30 @@ function RenderCard({character, comics, comicsTotalPages, stories, storiesTotalP
             >
                 <Grid.Row>
                     <Grid.Column width={16}>
-                        <Header as='h2'>Stories</Header>
                         <Grid
                             columns={3}
-                            style={{ background: "#181a1b", color: "rgba(232, 230, 227, 0.87)", marginRight: "6px" }}
+                            style={{ background: "#181a1b", color: "rgba(232, 230, 227, 0.87)", marginRight: "6px", marginTop: "12px", marginBottom: "12px" }}
                             divided
                         >
+                            <Grid.Row centered>
+                                <Header as='h2'>Stories</Header>
+                            </Grid.Row>
+                            {
+                                (stories.length > 0) &&
+                                <Grid.Row>
+                                    <Grid.Column width={4}></Grid.Column>
+                                    <Grid.Column width={4}>
+                                        <Container>
+                                            <Header as="h4">Title</Header>
+                                        </Container>
+                                    </Grid.Column>
+                                    <Grid.Column width={8}>
+                                        <Container>
+                                            <Header as="h4">Description</Header>
+                                        </Container>
+                                    </Grid.Column>
+                                </Grid.Row>
+                            }
                             {
                                 stories &&
                                 stories.map((story, index) => {
@@ -146,23 +201,23 @@ function RenderCard({character, comics, comicsTotalPages, stories, storiesTotalP
                                     );
                                 })
                             }
+                            <Grid.Row centered>
+                                {
+                                    (stories.length > 0)
+                                    ?
+                                    <Pagination 
+                                        totalPages={storiesTotalPages}
+                                        onPageChange={(event, data) => {
+                                            dispatch(setStoriesPageNumber(data.activePage - 1)); 
+                                            dispatch(fetchStoriesByCharacterId(data.activePage - 1, character.id)); 
+                                        }}
+                                    />
+                                    :
+                                    <p>No data.</p>
+                                }
+                            </Grid.Row>
                         </Grid>
                     </Grid.Column>
-                </Grid.Row>
-                <Grid.Row>
-                    {
-                        (stories.length > 0)
-                        ?
-                        <Pagination 
-                            totalPages={storiesTotalPages}
-                            onPageChange={(event, data) => {
-                                dispatch(setStoriesPageNumber(data.activePage - 1)); 
-                                dispatch(fetchStoriesByCharacterId(data.activePage - 1, character.id)); 
-                            }}
-                        />
-                        :
-                        <p>No data.</p>
-                    }
                 </Grid.Row>
             </Grid>
         </React.Fragment>
