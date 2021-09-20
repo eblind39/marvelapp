@@ -55,8 +55,8 @@ body {
 } */
 
 .comic-card-default-height {
-  min-height: 65vh !important;
-  max-height: 65vh !important;
+  min-height: 670px !important;
+  max-height: 670px !important;
 }
 
 .limit-text-words {
