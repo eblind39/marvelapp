@@ -43,8 +43,8 @@ body {
 
 /*---Custom-CSS---*/
 .character-card-default-height {
-    min-height: 550px !important;
-    max-height: 550px !important;
+    min-height: 500px !important;
+    max-height: 500px !important;
 }
 
 /* @media screen and (max-width:767px) {
@@ -55,8 +55,8 @@ body {
 } */
 
 .comic-card-default-height {
-  min-height: 670px !important;
-  max-height: 670px !important;
+  min-height: 620px !important;
+  max-height: 620px !important;
 }
 
 .limit-text-words {
@@ -93,4 +93,92 @@ h2.ui.header {
 .custom-font {
   font-family: cursive !important;
   font-size: 1.2em !important;
+}
+
+.set-equal-height {
+	display: block;
+	max-width: max-content;
+	min-width: 100%;
+}
+
+.set-equal-height img {
+	position: relative;
+	width: 100%;
+	height: 280px;
+}
+
+.set-equal-height img:hover {
+    opacity: 0.5;
+    filter:blur(0.5px);
+    transition: opacity 0.5s ease-in;
+}
+
+
+/* Mobile */
+
+@media only screen and (max-width: 767px) {
+	.set-equal-height {
+		height: 280px;
+		max-width: 290px;
+		width: 100%;
+		overflow: hidden;
+	}
+}
+
+
+/* Tablet / iPad Portrait */
+
+@media only screen and (min-width: 768px) and (max-width: 991px) {
+	.set-equal-height {
+		display: block;
+		max-width: max-content;
+		min-width: 100%;
+	}
+	.set-equal-height img {
+		position: relative;
+		width: 100%;
+		height: 280px;
+	}
+}
+
+
+/* Computer / Desktop / iPad Landscape */
+
+@media only screen and (min-width: 992px) and (max-width: 1199px) {
+	.set-equal-height {
+		height: 250px;
+	}
+	.set-equal-height img {
+		height: 250px;
+		width: max-content;
+		max-width: 100%;
+	}
+}
+
+
+/* Large Monitor */
+
+@media only screen and (min-width: 1200px) and (max-width: 1919px) {
+	.set-equal-height {
+		height: 250px;
+		width: 100%;
+	}
+	.set-equal-height img {
+		height: 250px;
+		width: 100%;
+	}
+}
+
+
+/* Widescreen Monitor */
+
+@media only screen and (min-width: 1920px) {
+	.set-equal-height {
+		height: 280px;
+		width: 100%;
+	}
+	.set-equal-height img {
+		height: 280px;
+		width: 100%;
+	}
 }
