@@ -41,6 +41,17 @@ body {
   }
 }
 
+.full-banner {
+    width: 100% !important;
+}
+
+.cropped-banner {
+    background: orange;
+    padding-bottom: 32px;
+    height: 250px;
+    overflow: hidden;
+}
+
 /*---Custom-CSS---*/
 .character-card-default-height {
     min-height: 500px !important;
