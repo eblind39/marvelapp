@@ -1,11 +1,11 @@
 import React, { Component } from "react";
 import { Route, Switch, withRouter, Redirect } from "react-router-dom";
 import CharactersIndex from "../Characters/CharactersIndex";
-import CharacterById from '../Characters/CharacterById';
-import CharactersFavorites from "../Characters/CharactersFavorites";
+import CharacterById from '../Characters/Detail/CharacterById';
+import CharactersFavorites from "../Characters/Favorites/CharactersFavorites";
 import ComicsIndex from "../Comics/ComicsIndex";
-import ComicById from '../Comics/ComicById';
-import ComicsFavorites from '../Comics/ComicsFavorites';
+import ComicById from '../Comics/Detail/ComicById';
+import ComicsFavorites from '../Comics/Favorites/ComicsFavorites';
 import Home from "../Home/HomeComponent";
 
 class Main extends Component {

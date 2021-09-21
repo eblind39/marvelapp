@@ -11,51 +11,56 @@ function NavMenu(props) {
 
     return (
         <React.Fragment>
-            <Grid style={{ background: 'orange', paddingBottom: "12px", paddingTop: "12px", marginTop: "12px" }} container columns={2} doubling textAlign='center' >
-                <Menu className="custom-font">
-                    <Menu.Item 
-                        as={ Link } 
-                        name='characters' 
-                        to='characters'
-                        active={isCharacters}
-                        className={isCharacters ? 'active-opt-menu' : 'inactive-opt-menu'}>
-                        <Icon name='user' />
-                        Characters
-                    </Menu.Item>
-                    <Menu.Item 
-                        as={ Link } 
-                        name='comics' 
-                        to='comics'
-                        active={isComics}
-                        className={isComics ? 'active-opt-menu' : 'inactive-opt-menu'}>
-                        <Icon name='address book' />
-                        Comics
-                    </Menu.Item>
-                    {/* { 
-                        (isCharacters || isCharacterFavorites) && */}
-                        <Menu.Item 
-                            as={ Link } 
-                            name='charactersfavorites' 
-                            to='charactersfavorites' 
+            <Grid
+                container
+                centered
+                style={{ background: "orange", marginRight: "12px", marginTop: "12px" }}
+                columns={2}
+                divided
+                doubling
+            >
+                <Grid.Row
+                    style={{ background: "#181a1b", color: "rgba(232, 230, 227, 0.87)", margin: "12px" }}
+                >
+                    <Menu className="custom-font">
+                        <Menu.Item
+                            as={Link}
+                            name='characters'
+                            to='characters'
+                            active={isCharacters}
+                            className={isCharacters ? 'active-opt-menu' : 'inactive-opt-menu'}>
+                            <Icon name='user' />
+                            Characters
+                        </Menu.Item>
+                        <Menu.Item
+                            as={Link}
+                            name='comics'
+                            to='comics'
+                            active={isComics}
+                            className={isComics ? 'active-opt-menu' : 'inactive-opt-menu'}>
+                            <Icon name='address book' />
+                            Comics
+                        </Menu.Item>
+                        <Menu.Item
+                            as={Link}
+                            name='charactersfavorites'
+                            to='charactersfavorites'
                             active={isCharacterFavorites}
                             className={isCharacterFavorites ? 'active-opt-menu' : 'inactive-opt-menu'}>
                             <Icon name='heart' />
                             Character Favorites
                         </Menu.Item>
-                    {/* }
-                    {
-                        (isComics || isComicFavorites) && */}
-                        <Menu.Item 
-                            as={ Link } 
-                            name='comicsfavorites' 
-                            to='comicsfavorites' 
+                        <Menu.Item
+                            as={Link}
+                            name='comicsfavorites'
+                            to='comicsfavorites'
                             active={isComicFavorites}
                             className={isComicFavorites ? 'active-opt-menu' : 'inactive-opt-menu'}>
                             <Icon name='heart' />
                             Comic Favorites
                         </Menu.Item>
-                    {/* } */}
-                </Menu>
+                    </Menu>
+                </Grid.Row>
             </Grid>
         </React.Fragment>
     );

@@ -1,27 +1,27 @@
 import * as ActionTypes from './comicsActionTypes';
 
 export const Comics = (state = {
-                                        isLoading: false,
-                                        errMes: null,
-                                        comics: [],
-                                        comic: {},
-                                        comicsAutoComplete: [],
-                                        charactersByComic: [],
-                                        charactersPageNumber: 0,
-                                        charactersTotalPages: 0,
-                                        charactersTotalCharacters: 0,
-                                        storiesByComic: [],
-                                        storiesPageNumber: 0,
-                                        storiesTotalPages: 0,
-                                        storiesTotalStories: 0,
-                                        comicsFavorites: [],
-                                        pageNumber: 0,
-                                        totalComics: 0,
-                                        totalPages: 0,
-                                        comicTitle: null,
-                                        comicFormat: null,
-                                        issueNumber: null
-                                    },
+                                    isLoading: false,
+                                    errMes: null,
+                                    comics: [],
+                                    comic: {},
+                                    comicsAutoComplete: [],
+                                    charactersByComic: [],
+                                    charactersPageNumber: 0,
+                                    charactersTotalPages: 0,
+                                    charactersTotalCharacters: 0,
+                                    storiesByComic: [],
+                                    storiesPageNumber: 0,
+                                    storiesTotalPages: 0,
+                                    storiesTotalStories: 0,
+                                    comicsFavorites: [],
+                                    pageNumber: 0,
+                                    totalComics: 0,
+                                    totalPages: 0,
+                                    comicTitle: null,
+                                    comicFormat: null,
+                                    issueNumber: null
+                                },
                            action) => {
                                switch (action.type) {
                                     case ActionTypes.COMICS_ADD:
@@ -38,10 +38,17 @@ export const Comics = (state = {
                                                 pageNumber: state.pageNumber
                                                }
                                    case ActionTypes.COMICS_ADD_BY_ID:
-                                       return { ...state, comic: action.payload }
+                                       return {
+                                                ...state, 
+                                                isLoading: false, 
+                                                errMes: null, 
+                                                comic: action.payload 
+                                              }
                                    case ActionTypes.COMICS_ADD_CHARACTERS_BY_COMICID:
                                        return {
                                            ...state,
+                                           isLoading: false, 
+                                           errMes: null, 
                                            charactersByComic: action.payload,
                                            charactersTotalCharacters: action.charactersTotalCharacters,
                                            charactersTotalPages: parseInt(action.charactersTotalCharacters / 3),
@@ -50,6 +57,8 @@ export const Comics = (state = {
                                    case ActionTypes.COMICS_ADD_STORIES_BY_COMICID:
                                        return {
                                            ...state,
+                                           isLoading: false, 
+                                           errMes: null, 
                                            storiesByComic: action.payload,
                                            storiesTotalStories: action.storiesTotalStories,
                                            storiesTotalPages: parseInt(action.storiesTotalStories / 3),
@@ -75,7 +84,7 @@ export const Comics = (state = {
                                         return {...state, charactersPageNumber: action.payload}
                                     case ActionTypes.COMICS_SET_STORIES_PAGE_NUMBER:
                                         return {...state, storiesPageNumber: action.payload}
-                                    case ActionTypes.COMICS_SET_FILTER_TITLE:
+                                    case ActionTypes.COMICS_SET_FILTERS:
                                         return {
                                                 ...state, 
                                                 isLoading: false, 

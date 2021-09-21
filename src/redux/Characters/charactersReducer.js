@@ -17,8 +17,8 @@ export const Characters = (state = {
                                         pageNumber: 0,
                                         totalCharacters: 0,
                                         totalPages: 0,
-                                        filterByName: null,
-                                        characterName: null,
+                                        orderByName: null,
+                                        characterNameFilter: null,
                                         comicIdFilter: null,
                                         storyIdFilter: null
                                     },
@@ -32,17 +32,24 @@ export const Characters = (state = {
                                                 characters: [...state.characters, ...action.payload],
                                                 totalCharacters: action.totalCharacters,
                                                 totalPages: parseInt(action.totalCharacters / 20),
-                                                characterName: action.characterName,
+                                                characterNameFilter: action.characterNameFilter,
                                                 comicIdFilter: action.comicIdFilter,
                                                 storyIdFilter: action.storyIdFilter,
-                                                filterByName: action.filterByName,
+                                                orderByName: action.orderByName,
                                                 pageNumber: state.pageNumber
                                                }
                                     case ActionTypes.CHARACTERS_ADD_BY_ID:
-                                        return {...state, character: action.payload}
-                                    case ActionTypes.CHARACTERS_ADD_COMICS_BY_CHARID:
                                         return {
                                                 ...state, 
+                                                isLoading: false, 
+                                                errMes: null, 
+                                                character: action.payload
+                                               }
+                                    case ActionTypes.CHARACTERS_ADD_COMICS_BY_CHARID:
+                                        return {
+                                                ...state,
+                                                isLoading: false, 
+                                                errMes: null, 
                                                 comicsByCharacter: action.payload, 
                                                 comicsTotalComics: action.comicsTotalComics, 
                                                 comicsTotalPages: parseInt(action.comicsTotalComics / 3),
@@ -50,17 +57,20 @@ export const Characters = (state = {
                                                }
                                     case ActionTypes.CHARACTERS_ADD_STORIES_BY_CHARID:
                                         return {
-                                                ...state, 
+                                                ...state,
+                                                isLoading: false, 
+                                                errMes: null, 
                                                 storiesByCharacter: action.payload, 
                                                 storiesTotalStories: action.storiesTotalStories, 
                                                 storiesTotalPages: parseInt(action.storiesTotalStories / 3),
                                                 storiesPageNumber: state.comicsPageNumber
                                                 }
                                     case ActionTypes.CHARACTERS_LOADING:
-                                        return {...state, isLoading: true, errMes: null, characterName: state.characterName}
+                                        return {...state, isLoading: true, errMes: null, characterNameFilter: state.characterNameFilter}
                                     case ActionTypes.CHARACTERS_FAILED:
                                         return {...state, isLoading: false, errMes: action.payload}
                                     case ActionTypes.CHARACTERS_INCREMENT_PAGE_NUMBER:
+                                        console.log('state.pageNumber', state.pageNumber);
                                         return {...state, pageNumber: state.pageNumber + 1}
                                     case ActionTypes.CHARACTERS_SET_COMICS_PAGE_NUMBER:
                                         return {...state, comicsPageNumber: action.payload}
@@ -74,10 +84,10 @@ export const Characters = (state = {
                                                 characters: [], 
                                                 totalCharacters: 0,
                                                 totalPages: 0, 
-                                                characterName: action.characterName,
+                                                characterNameFilter: action.characterNameFilter,
                                                 comicIdFilter: action.comicIdFilter,
                                                 storyIdFilter: action.storyIdFilter,
-                                                pageNumber: action.pageNumber
+                                                pageNumber: action.pageNumber,
                                                }
                                     case ActionTypes.CHARACTERS_SET_ARRAY_FAVORITES:
                                         return { ...state, charactersFavorites: action.payload }

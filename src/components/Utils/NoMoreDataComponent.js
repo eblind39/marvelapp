@@ -1,23 +1,27 @@
 import React from 'react';
-import { Icon } from 'semantic-ui-react';
 
-export const Loading = ({show}) => {
+export const NoMoreData = ({show}) => {
     const styleContainer = {
         zIndex: 899, 
         paddingTop: '4em',
-        color: '#ffffff'
+        marginTop: '3em', 
+        marginBottom: '3em', 
+    }
+    
+    const styleNoMoreData = {
+        color: '#ffffff', 
+        fontSize: "1em"
     }
 
     return(
         <React.Fragment>
             {show &&
                 <div style={styleContainer}>
-                    <Icon loading name='spinner' size='big' />
-                    <p>Loading...</p>
+                    <p style={styleNoMoreData}>No more data... ♥</p>
                 </div>
             }
         </React.Fragment>
     );
 }
 
-export default Loading;
+export default NoMoreData;

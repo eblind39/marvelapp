@@ -1,10 +1,12 @@
 import React from 'react';
-import { Icon } from 'semantic-ui-react';
 
-export const Loading = ({show}) => {
+export const NoData = ({show}) => {
     const styleContainer = {
         zIndex: 899, 
-        paddingTop: '4em',
+        paddingTop: '4em'
+    }
+
+    const styleNoData = {
         color: '#ffffff'
     }
 
@@ -12,12 +14,11 @@ export const Loading = ({show}) => {
         <React.Fragment>
             {show &&
                 <div style={styleContainer}>
-                    <Icon loading name='spinner' size='big' />
-                    <p>Loading...</p>
+                    <p style={styleNoData}>No data found...</p>
                 </div>
             }
         </React.Fragment>
     );
 }
 
-export default Loading;
+export default NoData;

@@ -3,7 +3,7 @@ import { PRIVATE_KEY, PUBLIC_KEY } from '../../data/apiKeys';
 import { MD5 } from 'crypto-js';
 import { baseUrl } from '../../data/baseUrl';
 
-export const fetchCharacters = (pageNumber, characterName, comicIdFilter, storyIdFilter, filterByName) => (dispatch) => {
+export const fetchCharacters = (pageNumber, characterNameFilter, comicIdFilter, storyIdFilter, orderByName) => (dispatch) => {
     dispatch(charactersLoading(true));
 
     // you need a new time stamp for every request                                                                                    
@@ -16,10 +16,10 @@ export const fetchCharacters = (pageNumber, characterName, comicIdFilter, storyI
         offset: (pageNumber * 20), 
         limit: 20
     };
-    if (characterName) params.nameStartsWith = characterName;
+    if (characterNameFilter) params.nameStartsWith = characterNameFilter;
     if (comicIdFilter) params.comics = comicIdFilter;
     if (storyIdFilter) params.stories = storyIdFilter;
-    if (filterByName) params.orderBy = filterByName;
+    if (orderByName) params.orderBy = orderByName;
 
     apiUrl.search = new URLSearchParams(params).toString();
 
@@ -42,7 +42,7 @@ export const fetchCharacters = (pageNumber, characterName, comicIdFilter, storyI
             .then(response => response.json())
             .then(characters => {
                 if (characters?.data?.results) {
-                    dispatch(addCharacters(characters.data.results, characters.data.total, characterName, comicIdFilter, storyIdFilter, filterByName))
+                    dispatch(addCharacters(pageNumber, characters.data.results, characters.data.total, characterNameFilter, comicIdFilter, storyIdFilter, orderByName))
                 }
             })
             .catch(error => dispatch(charactersFailed(error.message)));
@@ -170,7 +170,6 @@ export const fetchStoriesByCharacterId = (pageNumber, characterId) => (dispatch)
 }
 
 export const addToFavorites = (charactersFavorites, character) => (dispatch) => {
-    console.log('addToFavorites', charactersFavorites, character);
     let letFiltered = charactersFavorites.filter(item => item.id === character.id);
     let localArr = (letFiltered.length > 0 ? [...charactersFavorites] : [...charactersFavorites, character]);
     dispatch(setFavoritesArray(localArr));
@@ -188,9 +187,9 @@ export const incPageNumber = () => ({
     type: ActionTypes.CHARACTERS_INCREMENT_PAGE_NUMBER
 });
 
-export const setCharacterFilter = (characterName, comicIdFilter, storyIdFilter) => ({
+export const setCharacterFilter = (characterNameFilter, comicIdFilter, storyIdFilter) => ({
     type: ActionTypes.CHARACTERS_SET_FILTERS,
-    characterName: characterName,
+    characterNameFilter: characterNameFilter,
     comicIdFilter: comicIdFilter,
     storyIdFilter: storyIdFilter,
     pageNumber: 0
@@ -200,14 +199,15 @@ export const charactersLoading = () => ({
     type: ActionTypes.CHARACTERS_LOADING
 });
 
-export const addCharacters = (characters, total, characterName, comicIdFilter, storyIdFilter, filterByName) => ({
+export const addCharacters = (pageNumber, characters, total, characterNameFilter, comicIdFilter, storyIdFilter, orderByName) => ({
     type: ActionTypes.CHARACTERS_ADD,
     payload: characters,
     totalCharacters: total,
-    characterName: characterName,
+    characterNameFilter: characterNameFilter,
     comicIdFilter: comicIdFilter,
     storyIdFilter: storyIdFilter,
-    filterByName: filterByName
+    orderByName: orderByName
+    // pageNumber: pageNumber
 });
 
 export const addCharacterById = (character) => ({

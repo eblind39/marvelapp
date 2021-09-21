@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Grid, Form, Input, Button, Select, Search } from "semantic-ui-react";
+import { Grid, Form, Input, Button, Select, Search, Label } from "semantic-ui-react";
 import { setCharacterFilter, fetchCharacters } from "../../redux/Characters/charactersActionCreators";
 import { fetchComics } from "../../redux/Comics/comicsActionCreators";
 import { fetchStories } from "../../redux/Stories/storiesActionCreators";
@@ -15,9 +15,7 @@ function CharactersSearchBar(props) {
 	const pageNumber = useSelector((state) => state.characters.pageNumber);
 	// for comics
 	const isComicsLoading = useSelector((state) => state.comics.isLoadding);
-	const comicsAutoComplete = useSelector(
-		(state) => state.comics.comicsAutoComplete
-	);
+	const comicsAutoComplete = useSelector((state) => state.comics.comicsAutoComplete);
 	// for stories
 	const isStoriesLoading = useSelector((state) => state.stories.isLoadding);
 	const storiesAutoComplete = useSelector(
@@ -26,11 +24,12 @@ function CharactersSearchBar(props) {
 	const dispatch = useDispatch();
 	const timeoutComicsRef = useRef();
 
-	const searchByCharacterName = () => {
-		let strSearchText = searchText === "" ? null : searchText;
-		let strSelectedComicId = selectedComicId === "" ? null : selectedComicId;
-		let strSelectedStoryId = selectedStoryId === "" ? null : selectedStoryId;
-		let strSelectedOrderDir = selectedOrderDir === "" ? null : selectedOrderDir;
+	const doSearchCharacters = () => {
+		let strSearchText = (searchText === "" ? null : searchText);
+		let strSelectedComicId = (selectedComicId === "" ? null : selectedComicId);
+		let strSelectedStoryId = (selectedStoryId === "" ? null : selectedStoryId);
+		let strSelectedOrderDir = (selectedOrderDir === "" ? null : selectedOrderDir);
+		console.log(strSearchText, strSelectedComicId, strSelectedStoryId, strSelectedOrderDir);
 		dispatch(setCharacterFilter(strSearchText, strSelectedComicId, strSelectedStoryId));
 		dispatch(fetchCharacters(pageNumber, strSearchText, strSelectedComicId, strSelectedStoryId, strSelectedOrderDir));
 	};
@@ -38,8 +37,7 @@ function CharactersSearchBar(props) {
 	// Start for comics autocomplete
 	const handleSearchComicsChange = (e, data) => {
 		clearTimeout(timeoutComicsRef.current);
-		// dispatch(fetchComics(0, data.value, true));
-		dispatch(fetchComics(0, data.value, null, null, true));
+		dispatch(fetchComics(0, data.value, null, null, null, true));
 
 		timeoutComicsRef.current = setTimeout(() => {
 			if (comicsAutoComplete.length === 0) {
@@ -72,6 +70,8 @@ function CharactersSearchBar(props) {
 		setStoriesCombo(tmpArr);
 	}, [storiesAutoComplete]);
 
+	const resultRenderer = ({ title }) => <Label content={title} />
+
 	return (
 		<React.Fragment>
 			<Grid
@@ -86,7 +86,7 @@ function CharactersSearchBar(props) {
 					<Form.Group widths="equal">
 						<Form.Field
 							control={Input}
-							autocomplete="off"
+							autoComplete="off"
 							label=""
 							placeholder="Name"
 							onChange={(e) => setSearchText(e.target.value)}
@@ -95,6 +95,7 @@ function CharactersSearchBar(props) {
 							control={Search}
 							placeholder="Comic"
 							loading={isComicsLoading}
+							resultRenderer={resultRenderer}
 							onSearchChange={handleSearchComicsChange}
 							onResultSelect={(e, data) => {
 								dispatch(fetchStories(0, data.result.id, true));
@@ -106,8 +107,8 @@ function CharactersSearchBar(props) {
 							control={Select}
 							placeholder="Select a story"
 							options={storiesCombo}
-							onResultSelect={(e, data) => {
-								setSelectedStoryId(data.result.id);
+							onChange={(e, { value }) => {
+								setSelectedStoryId(value);
 							}}
 						/>
 						<Form.Field
@@ -115,12 +116,11 @@ function CharactersSearchBar(props) {
 							placeholder="Order by name"
 							options={orderNameComboOpts}
 							onChange={ (e, { value }) => setSelectedOrderDir(value) }
-							onResultSelect={(e, data) => setSelectedOrderDir(data.result.id) }
 						/> 
                         <Button
                             style={{ marginBottom: "12px" }}
                             primary
-                            onClick={searchByCharacterName}
+                            onClick={doSearchCharacters}
                         >
                             Search
                         </Button>

@@ -1,7 +1,7 @@
 import React from "react";
-import CharactersBanner from "../Characters/CharactersBanner";
-import CharactersSearchBar from "../Characters/CharactersSearchBar";
-import CharactersList from "../Characters/CharactersList";
+import CharactersBanner from "./CharactersBanner";
+import CharactersSearchBar from "./CharactersSearchBar";
+import CharactersList from "./List/CharactersList";
 import NavMenu from '../NavMenu/NavMenu';
 
 function CharactersIndex(props) {

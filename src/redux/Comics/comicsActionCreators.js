@@ -3,7 +3,7 @@ import { PRIVATE_KEY, PUBLIC_KEY } from '../../data/apiKeys';
 import { MD5 } from 'crypto-js';
 import { baseUrl } from '../../data/baseUrl';
 
-export const fetchComics = (pageNumber, comicTitle, comicFormat, issueNumber, isAutoComplete) => (dispatch) => {
+export const fetchComics = (pageNumber, comicTitle, comicFormat, issueNumber, filterByIssueNumber, isAutoComplete) => (dispatch) => {
     dispatch(comicsLoading(true));
     let intLimit = (isAutoComplete ? 6 : 20)
 
@@ -20,6 +20,7 @@ export const fetchComics = (pageNumber, comicTitle, comicFormat, issueNumber, is
     if (comicTitle) params.titleStartsWith = comicTitle;
     if (comicFormat) params.formatType = comicFormat;
     if (issueNumber) params.issueNumber = issueNumber;
+    if (filterByIssueNumber) params.orderBy = filterByIssueNumber;
 
     apiUrl.search = new URLSearchParams(params).toString();
 
@@ -192,7 +193,7 @@ export const incPageNumber = () => ({
 });
 
 export const setComicFilters = (comicTitle, comicFormat, issueNumber) => ({
-    type: ActionTypes.COMICS_SET_FILTER_TITLE,
+    type: ActionTypes.COMICS_SET_FILTERS,
     comicTitle: comicTitle,
     comicFormat: comicFormat,
     issueNumber: issueNumber,
