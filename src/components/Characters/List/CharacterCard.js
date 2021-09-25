@@ -21,10 +21,10 @@ function CharacterCard({character, charactersFavorites}) {
 
     useEffect(() => {
         setIsCharacterInFavs(charactersFavorites ? charactersFavorites.includes(character) : false);
-    }, [])
+    }, []);
 
     return (
-        <Card className="character-card-default-height" style={{cursor: "pointer"}}>
+        <Card className="character-card-default-height">
             <div
                 className="set-equal-height"
             >

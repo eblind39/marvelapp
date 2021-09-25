@@ -10,7 +10,6 @@ function ComicCard({comic, comicsFavorites}) {
     let srcImage = `${ comic.thumbnail.path }.${ comic.thumbnail.extension }`;
 
     const toggleFavorites = function() {
-        console.log('toggleFavorites', isComicInFavs);
         if (!isComicInFavs) {
             dispatch(addToFavorites(comicsFavorites, comic));
             setIsComicInFavs(true);
@@ -22,11 +21,21 @@ function ComicCard({comic, comicsFavorites}) {
 
     useEffect(() => {
         setIsComicInFavs(comicsFavorites ? comicsFavorites.includes(comic) : false);
-    }, [])
+    }, []);
 
     return (
         <Card className="comic-card-default-height">
-            <Image as={Link} to={`/comics/${comic.id}`} src={ srcImage } wrapped ui={false} />
+            <div
+                className="set-equal-height"
+            >
+                <Image 
+                    as={Link} 
+                    to={`/comics/${comic.id}`} 
+                    src={srcImage} 
+                    wrapped 
+                    fluid
+                    ui={false} />
+            </div>
             <Card.Content>
                 <Card.Header>{ comic.title }</Card.Header>
                 <Card.Meta>

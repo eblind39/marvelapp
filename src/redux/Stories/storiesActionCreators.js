@@ -1,11 +1,12 @@
 import * as ActionTypes from '././storiesActionTypes';
+import * as DefaultPaginationConsts from '../../data/paginationData';
 import { PRIVATE_KEY, PUBLIC_KEY } from '../../data/apiKeys';
 import { MD5 } from 'crypto-js';
 import { baseUrl } from '../../data/baseUrl';
 
 export const fetchStories = (pageNumber, comicId, isAutoComplete) => (dispatch) => {
     dispatch(storiesLoading(true));
-    let intLimit = (isAutoComplete ? 6 : 20)
+    let intLimit = (isAutoComplete ? DefaultPaginationConsts.autocompletePageSize : DefaultPaginationConsts.defaultPageSize)
 
     // you need a new time stamp for every request                                                                                    
     let ts = new Date().getTime();

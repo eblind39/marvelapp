@@ -6,8 +6,18 @@ function ComicFavoriteCard({comic}) {
     let srcImage = `${ comic.thumbnail.path }.${ comic.thumbnail.extension }`;
 
     return (
-        <Card className="comic-card-default-height" style={{cursor: "pointer", marginBottom: "30px"}}>
-            <Image as={Link} to={`/comics/${comic.id}`} src={srcImage} wrapped ui={false} />
+        <Card className="comic-card-default-height" style={{marginBottom: "30px"}}>
+            <div
+                className="set-equal-height"
+            >
+                <Image 
+                    as={Link} 
+                    to={`/comics/${comic.id}`} 
+                    src={srcImage} 
+                    wrapped 
+                    fluid
+                    ui={false} />
+            </div>
             <Card.Content>
                 <Card.Header>{comic.name}</Card.Header>
                 <Card.Meta>

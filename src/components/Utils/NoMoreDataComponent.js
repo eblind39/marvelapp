@@ -1,6 +1,6 @@
 import React from 'react';
 
-export const NoMoreData = ({show}) => {
+export const NoMoreData = ({showif}) => {
     const styleContainer = {
         zIndex: 899, 
         paddingTop: '4em',
@@ -15,7 +15,7 @@ export const NoMoreData = ({show}) => {
 
     return(
         <React.Fragment>
-            {show &&
+            {showif &&
                 <div style={styleContainer}>
                     <p style={styleNoMoreData}>No more data... ♥</p>
                 </div>

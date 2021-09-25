@@ -3,8 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchStoriesByComicId, fetchCharactersByComicId, fetchComicById } from '../../../redux/Comics/comicsActionCreators';
 import ComicCardDetail from './ComicCardDetail';
 
-function ComicById(props) {
-    const [comicId, setComicId] = useState(null);
+function ComicById({comicId}) {
     const comic = useSelector(state => state.comics.comic);
     const charactersByComic = useSelector(state => state.comics.charactersByComic);
     const charactersTotalPages = useSelector(state => state.comics.charactersTotalPages);
@@ -15,12 +14,6 @@ function ComicById(props) {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        let strPath = document.location.pathname;
-        let arrTmp = strPath.split('/');
-        let comicIdLocal = arrTmp[arrTmp.length - 1];
-
-        setComicId(comicIdLocal);
-        console.log(comicIdLocal);
         if (comicId === null) return;
         dispatch(fetchComicById(comicId));
         dispatch(fetchCharactersByComicId(0, comicId));

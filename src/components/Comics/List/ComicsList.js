@@ -1,21 +1,25 @@
 import React, { useRef, useState } from "react";
 import { useEffect, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import Loading from "../../Loading/LoadingComponent";
-import NoData from "../../Utils/NoDataComponent";
+import Loading from "../../Utils/LoadingComponent";
+import NoDataFound from "../../Utils/NoDataFoundComponent";
 import NoMoreData from "../../Utils/NoMoreDataComponent";
 import { fetchComics, incPageNumber } from "../../../redux/Comics/comicsActionCreators";
 import { setActiveMenu } from '../../../redux/NavMenu/navmenuActionCreators';
 import * as MenuOptions from '../../../data/navmenuOptions';
 import { Grid } from "semantic-ui-react";
 import ComicCard from './ComicCard';
+import ScrollToTopPage from "../../Utils/ScrollToTopPageComponent";
 
 function ComicsList(props) {
     const [lastElement, setLastElement] = useState(null);
     const isLoading = useSelector(state => state.comics.isLoading);
     const errMess = useSelector(state => state.comics.errMess);
     const pageNumber = useSelector(state => state.comics.pageNumber);
-    const comicTitle = useSelector(state => state.comics.comicTitle);
+    const comicTitleFilter = useSelector(state => state.comics.comicTitleFilter);
+    const comicFormatFilter = useSelector(state => state.comics.comicFormatFilter);
+    const issueNumberFilter = useSelector(state => state.comics.issueNumberFilter);
+    const orderByIssueNumber = useSelector(state => state.comics.orderByIssueNumber);
     const comics = useSelector(state => state.comics.comics);
     const comicsFavorites = useSelector(state => state.comics.comicsFavorites);
     const totalPages = useSelector(state => state.comics.totalPages);
@@ -23,7 +27,7 @@ function ComicsList(props) {
     const dispatch = useDispatch();
 
     const getComics = useCallback(() => {
-        dispatch(fetchComics(pageNumber, comicTitle));
+        dispatch(fetchComics(comics, pageNumber, comicTitleFilter, comicFormatFilter, issueNumberFilter, orderByIssueNumber));
     }, [pageNumber, dispatch]);
 
     useEffect(() => {
@@ -103,9 +107,10 @@ function ComicsList(props) {
                     })
                 }
                 <Grid.Row>
-                    <Loading show={isLoading} />
-                    <NoData show={totalComics === 0 && !isLoading} />
-                    <NoMoreData show={pageNumber - 1 === totalPages} />
+                    <Loading showif={isLoading} />
+                    <NoDataFound showif={totalComics === 0 && !isLoading} />
+                    <NoMoreData showif={pageNumber - 1 === totalPages} />
+                    <ScrollToTopPage />
                 </Grid.Row>
             </Grid>
 

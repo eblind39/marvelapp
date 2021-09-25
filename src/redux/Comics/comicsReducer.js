@@ -1,4 +1,5 @@
 import * as ActionTypes from './comicsActionTypes';
+import * as DefaultPaginationConsts from '../../data/paginationData';
 
 export const Comics = (state = {
                                     isLoading: false,
@@ -18,9 +19,10 @@ export const Comics = (state = {
                                     pageNumber: 0,
                                     totalComics: 0,
                                     totalPages: 0,
-                                    comicTitle: null,
-                                    comicFormat: null,
-                                    issueNumber: null
+                                    comicTitleFilter: null,
+                                    comicFormatFilter: null,
+                                    issueNumberFilter: null,
+                                    orderByIssueNumber: null
                                 },
                            action) => {
                                switch (action.type) {
@@ -31,10 +33,11 @@ export const Comics = (state = {
                                                 errMes: null, 
                                                 comics: [...state.comics, ...action.payload],
                                                 totalComics: action.totalComics,
-                                                totalPages: parseInt(action.totalComics / 20),
-                                                comicTitle: action.comicTitle,
-                                                comicFormat: action.comicFormat,
-                                                issueNumber: action.issueNumber,
+                                                totalPages: parseInt(action.totalComics / DefaultPaginationConsts.defaultPageSize),
+                                                comicTitleFilter: state.comicTitleFilter,
+                                                comicFormatFilter: state.comicFormatFilter,
+                                                issueNumberFilter: state.issueNumberFilter,
+                                                orderByIssueNumber: state.orderByIssueNumber,
                                                 pageNumber: state.pageNumber
                                                }
                                    case ActionTypes.COMICS_ADD_BY_ID:
@@ -51,7 +54,7 @@ export const Comics = (state = {
                                            errMes: null, 
                                            charactersByComic: action.payload,
                                            charactersTotalCharacters: action.charactersTotalCharacters,
-                                           charactersTotalPages: parseInt(action.charactersTotalCharacters / 3),
+                                           charactersTotalPages: parseInt(action.charactersTotalCharacters / DefaultPaginationConsts.tablePageSize),
                                            charactersPageNumber: state.charactersPageNumber
                                        }
                                    case ActionTypes.COMICS_ADD_STORIES_BY_COMICID:
@@ -61,21 +64,21 @@ export const Comics = (state = {
                                            errMes: null, 
                                            storiesByComic: action.payload,
                                            storiesTotalStories: action.storiesTotalStories,
-                                           storiesTotalPages: parseInt(action.storiesTotalStories / 3),
+                                           storiesTotalPages: parseInt(action.storiesTotalStories / DefaultPaginationConsts.tablePageSize),
                                            storiesPageNumber: state.comicsPageNumber
                                        }
                                     case ActionTypes.COMICS_ADD_SEARCH:
                                         return {
                                                 ...state, 
-                                                isLoading: false, 
+                                                isLoading: false,
                                                 errMes: null, 
                                                 comicsAutoComplete: action.payload,
-                                                comicTitle: action.comicTitle,
-                                                comicFormat: action.comicFormat,
-                                                issueNumber: action.issueNumber
+                                                comicTitleFilter: action.comicTitleFilter,
+                                                comicFormatFilter: action.comicFormatFilter,
+                                                issueNumberFilter: action.issueNumberFilter
                                                 }
                                     case ActionTypes.COMICS_LOADING:
-                                        return {...state, isLoading: true, errMes: null, comicTitle: state.comicTitle}
+                                        return {...state, isLoading: true, errMes: null, comicTitleFilter: state.comicTitleFilter}
                                     case ActionTypes.COMICS_FAILED:
                                         return {...state, isLoading: false, errMes: action.payload}
                                     case ActionTypes.COMICS_INCREMENT_PAGE_NUMBER:
@@ -92,9 +95,10 @@ export const Comics = (state = {
                                                 comics: [], 
                                                 totalComics: 0, 
                                                 totalPages: 0, 
-                                                comicTitle: action.comicTitle,
-                                                comicFormat: action.comicFormat,
-                                                issueNumber: action.issueNumber,
+                                                comicTitleFilter: action.comicTitleFilter,
+                                                comicFormatFilter: action.comicFormatFilter,
+                                                issueNumberFilter: action.issueNumberFilter,
+                                                orderByIssueNumber: action.orderByIssueNumber,
                                                 pageNumber: action.pageNumber
                                                }
                                     case ActionTypes.COMICS_SET_ARRAY_FAVORITES:

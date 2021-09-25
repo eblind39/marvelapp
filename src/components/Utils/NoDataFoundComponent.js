@@ -1,6 +1,6 @@
 import React from 'react';
 
-export const NoData = ({show}) => {
+export const NoDataFound = ({showif}) => {
     const styleContainer = {
         zIndex: 899, 
         paddingTop: '4em'
@@ -12,7 +12,7 @@ export const NoData = ({show}) => {
 
     return(
         <React.Fragment>
-            {show &&
+            {showif &&
                 <div style={styleContainer}>
                     <p style={styleNoData}>No data found...</p>
                 </div>
@@ -21,4 +21,4 @@ export const NoData = ({show}) => {
     );
 }
 
-export default NoData;
+export default NoDataFound;

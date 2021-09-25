@@ -6,8 +6,18 @@ function CharacterFavoriteCard({character}) {
     let srcImage = `${ character.thumbnail.path }.${ character.thumbnail.extension }`;
 
     return (
-        <Card className="character-card-default-height" style={{cursor: "pointer", marginBottom: "30px"}}>
-            <Image as={Link} to={`/characters/${character.id}`} src={ srcImage } wrapped ui={false} />
+        <Card className="character-card-default-height" style={{marginBottom: "30px"}}>
+            <div
+                className="set-equal-height"
+            >
+                <Image 
+                    as={Link} 
+                    to={`/characters/${character.id}`} 
+                    src={srcImage} 
+                    wrapped 
+                    fluid
+                    ui={false} />
+            </div>
             <Card.Content>
                 <Card.Header>{ character.name }</Card.Header>
                 <Card.Meta>

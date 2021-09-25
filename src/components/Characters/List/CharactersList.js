@@ -1,22 +1,25 @@
 import React, { useRef, useState } from "react";
 import { useEffect, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import Loading from "../../Loading/LoadingComponent";
-import NoData from "../../Utils/NoDataComponent";
+import Loading from "../../Utils/LoadingComponent";
+import NoDataFound from "../../Utils/NoDataFoundComponent";
 import NoMoreData from "../../Utils/NoMoreDataComponent";
 import { fetchCharacters, incPageNumber } from "../../../redux/Characters/charactersActionCreators";
 import { setActiveMenu } from '../../../redux/NavMenu/navmenuActionCreators';
 import * as MenuOptions from '../../../data/navmenuOptions';
 import { Grid } from "semantic-ui-react";
 import CharacterCard from "./CharacterCard";
+import ScrollToTopPage from "../../Utils/ScrollToTopPageComponent";
 
 function CharactersList(props) {
     const [lastElement, setLastElement] = useState(null);
     const isLoading = useSelector(state => state.characters.isLoading);
     const errMess = useSelector(state => state.characters.errMess);
     const pageNumber = useSelector(state => state.characters.pageNumber);
-    const characterName = useSelector(state => state.characters.characterName);
+    const characterNameFilter = useSelector(state => state.characters.characterNameFilter);
     const comicIdFilter = useSelector(state => state.characters.comicIdFilter);
+    const storyIdFilter = useSelector(state => state.characters.storyIdFilter);
+    const orderByName = useSelector(state => state.characters.orderByName);
     const characters = useSelector(state => state.characters.characters);
     const totalPages = useSelector(state => state.characters.totalPages);
     const totalCharacters = useSelector(state => state.characters.totalCharacters);
@@ -24,7 +27,7 @@ function CharactersList(props) {
     const dispatch = useDispatch();
 
     const getCharacters = useCallback(() => {
-        dispatch(fetchCharacters(pageNumber, characterName, comicIdFilter));
+        dispatch(fetchCharacters(characters, pageNumber, characterNameFilter, comicIdFilter, storyIdFilter, orderByName));
     }, [pageNumber, dispatch]);
 
     useEffect(() => {
@@ -104,9 +107,10 @@ function CharactersList(props) {
                     })
                 }
                 <Grid.Row>
-                    <Loading show={isLoading} />
-                    <NoData show={totalCharacters === 0 && !isLoading} />
-                    <NoMoreData show={pageNumber - 1 === totalPages} />
+                    <Loading showif={isLoading} />
+                    <NoDataFound showif={totalCharacters === 0 && !isLoading} />
+                    <NoMoreData showif={pageNumber - 1 === totalPages} />
+                    <ScrollToTopPage />
                 </Grid.Row>
             </Grid>
         </React.Fragment>

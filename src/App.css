@@ -41,21 +41,21 @@ body {
   }
 }
 
+/*---Custom-CSS---*/
 .full-banner {
-    width: 100% !important;
+  width: 100% !important;
 }
 
 .cropped-banner {
-    background: orange;
-    padding-bottom: 32px;
-    height: 250px;
-    overflow: hidden;
+  background: orange;
+  padding-bottom: 32px;
+  height: 250px;
+  overflow: hidden;
 }
 
-/*---Custom-CSS---*/
-.character-card-default-height {
-    min-height: 500px !important;
-    max-height: 500px !important;
+.character-card-default-height, .comic-card-default-height {
+    min-height: 570px !important;
+    max-height: 570px !important;
 }
 
 /* @media screen and (max-width:767px) {
@@ -64,11 +64,6 @@ body {
         display: table !important;
     }
 } */
-
-.comic-card-default-height {
-  min-height: 620px !important;
-  max-height: 620px !important;
-}
 
 .limit-text-words {
   width: auto;
@@ -90,7 +85,7 @@ h2.ui.header {
   color: #eb4034 !important;
 }
 .inactive-opt-menu {
-  color: #000000 !important;
+  color: #2e48df !important;
 }
 
 .float-inside-image {
@@ -101,9 +96,16 @@ h2.ui.header {
   top: 5px;
 }
 
+.scroll-to-top {
+  position: fixed;
+  bottom: 1rem;
+  right: 1rem;
+  animation: fadeIn 700ms ease-in-out 1s both;
+  cursor: pointer;
+}
+
 .custom-font {
-  font-family: cursive !important;
-  font-size: 1.2em !important;
+  font: italic small-caps bold 20px/30px Georgia, serif !important;
 }
 
 .set-equal-height {

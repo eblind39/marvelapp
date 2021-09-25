@@ -1,8 +1,8 @@
 import React from "react";
 import NavMenu from "../NavMenu/NavMenu";
-import ComicsBanner from "./ComicsBanner";
+import ComicsBanner from "./Banner/ComicsBanner";
 import ComicsList from "./List/ComicsList";
-import ComicsSearchBar from "./ComicsSearchBar";
+import ComicsSearchBar from "./SearchBar/ComicsSearchBar";
 
 function ComicsIndex(props) {
     return (

@@ -1,12 +1,11 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
-import { Grid, Card, Image, Header } from "semantic-ui-react";
+import { Grid, Header } from "semantic-ui-react";
 import NavMenu from "../../NavMenu/NavMenu";
-import ComicsBanner from "./../ComicsBanner";
+import ComicsBanner from "./../Banner/ComicsBanner";
 import { setActiveMenu } from '../../../redux/NavMenu/navmenuActionCreators';
 import * as MenuOptions from '../../../data/navmenuOptions';
-import NoData from "../../Utils/NoDataComponent";
+import NoDataFound from "../../Utils/NoDataFoundComponent";
 import NoMoreData from "../../Utils/NoMoreDataComponent";
 import ComicFavoriteCard from "./ComicFavoriteCard";
 
@@ -47,8 +46,8 @@ function ComicsFavorites(props) {
                     }
                 </Grid.Row>
                 <Grid.Row>
-                    <NoData show={comicsFavorites.length === 0} />
-                    <NoMoreData show={comicsFavorites.length > 0} />
+                    <NoDataFound showif={comicsFavorites.length === 0} />
+                    <NoMoreData showif={comicsFavorites.length > 0} />
                 </Grid.Row>
             </Grid>
 

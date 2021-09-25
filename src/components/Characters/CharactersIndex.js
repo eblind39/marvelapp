@@ -1,6 +1,6 @@
 import React from "react";
-import CharactersBanner from "./CharactersBanner";
-import CharactersSearchBar from "./CharactersSearchBar";
+import CharactersBanner from "./Banner/CharactersBanner";
+import CharactersSearchBar from "./SearchBar/CharactersSearchBar";
 import CharactersList from "./List/CharactersList";
 import NavMenu from '../NavMenu/NavMenu';
 

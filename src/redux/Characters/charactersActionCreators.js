@@ -1,9 +1,10 @@
 import * as ActionTypes from './charactersActionTypes';
+import * as DefaultPaginationConsts from '../../data/paginationData';
 import { PRIVATE_KEY, PUBLIC_KEY } from '../../data/apiKeys';
 import { MD5 } from 'crypto-js';
 import { baseUrl } from '../../data/baseUrl';
 
-export const fetchCharacters = (pageNumber, characterNameFilter, comicIdFilter, storyIdFilter, orderByName) => (dispatch) => {
+export const fetchCharacters = (charactersState, pageNumber, characterNameFilter, comicIdFilter, storyIdFilter, orderByName) => (dispatch) => {
     dispatch(charactersLoading(true));
 
     // you need a new time stamp for every request                                                                                    
@@ -13,8 +14,8 @@ export const fetchCharacters = (pageNumber, characterNameFilter, comicIdFilter, 
     let params = { 
         apikey: PUBLIC_KEY, 
         hash: hash, 
-        offset: (pageNumber * 20), 
-        limit: 20
+        offset: (pageNumber * DefaultPaginationConsts.defaultPageSize), 
+        limit: DefaultPaginationConsts.defaultPageSize
     };
     if (characterNameFilter) params.nameStartsWith = characterNameFilter;
     if (comicIdFilter) params.comics = comicIdFilter;
@@ -42,7 +43,9 @@ export const fetchCharacters = (pageNumber, characterNameFilter, comicIdFilter, 
             .then(response => response.json())
             .then(characters => {
                 if (characters?.data?.results) {
-                    dispatch(addCharacters(pageNumber, characters.data.results, characters.data.total, characterNameFilter, comicIdFilter, storyIdFilter, orderByName))
+                    // verify if new characters.data.results are contained in charactersState
+                    let arrTmp = characters.data.results.filter((item, index) => !charactersState.some(itemstt => itemstt.id === item.id));
+                    dispatch(addCharacters(arrTmp, characters.data.total));
                 }
             })
             .catch(error => dispatch(charactersFailed(error.message)));
@@ -97,8 +100,8 @@ export const fetchComicsByCharacterId = (pageNumber, characterId) => (dispatch) 
     let params = { 
         apikey: PUBLIC_KEY, 
         hash: hash,
-        offset: (pageNumber * 3), 
-        limit: 3
+        offset: (pageNumber * DefaultPaginationConsts.tablePageSize), 
+        limit: DefaultPaginationConsts.tablePageSize
     };
 
     apiUrl.search = new URLSearchParams(params).toString();
@@ -138,8 +141,8 @@ export const fetchStoriesByCharacterId = (pageNumber, characterId) => (dispatch)
     let params = { 
         apikey: PUBLIC_KEY, 
         hash: hash,
-        offset: (pageNumber * 3), 
-        limit: 3
+        offset: (pageNumber * DefaultPaginationConsts.tablePageSize), 
+        limit: DefaultPaginationConsts.tablePageSize
     };
 
     apiUrl.search = new URLSearchParams(params).toString();
@@ -187,11 +190,12 @@ export const incPageNumber = () => ({
     type: ActionTypes.CHARACTERS_INCREMENT_PAGE_NUMBER
 });
 
-export const setCharacterFilter = (characterNameFilter, comicIdFilter, storyIdFilter) => ({
+export const setCharacterFilter = (characterNameFilter, comicIdFilter, storyIdFilter, orderByName) => ({
     type: ActionTypes.CHARACTERS_SET_FILTERS,
     characterNameFilter: characterNameFilter,
     comicIdFilter: comicIdFilter,
     storyIdFilter: storyIdFilter,
+    orderByName: orderByName,
     pageNumber: 0
 });
 
@@ -199,15 +203,10 @@ export const charactersLoading = () => ({
     type: ActionTypes.CHARACTERS_LOADING
 });
 
-export const addCharacters = (pageNumber, characters, total, characterNameFilter, comicIdFilter, storyIdFilter, orderByName) => ({
+export const addCharacters = (characters, total) => ({
     type: ActionTypes.CHARACTERS_ADD,
     payload: characters,
-    totalCharacters: total,
-    characterNameFilter: characterNameFilter,
-    comicIdFilter: comicIdFilter,
-    storyIdFilter: storyIdFilter,
-    orderByName: orderByName
-    // pageNumber: pageNumber
+    totalCharacters: total
 });
 
 export const addCharacterById = (character) => ({

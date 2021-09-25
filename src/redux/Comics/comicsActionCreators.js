@@ -1,11 +1,12 @@
 import * as ActionTypes from '././comicsActionTypes';
+import * as DefaultPaginationConsts from '../../data/paginationData';
 import { PRIVATE_KEY, PUBLIC_KEY } from '../../data/apiKeys';
 import { MD5 } from 'crypto-js';
 import { baseUrl } from '../../data/baseUrl';
 
-export const fetchComics = (pageNumber, comicTitle, comicFormat, issueNumber, filterByIssueNumber, isAutoComplete) => (dispatch) => {
+export const fetchComics = (comicsState, pageNumber, comicTitleFilter, comicFormatFilter, issueNumberFilter, filterByIssueNumber, isAutoComplete) => (dispatch) => {
     dispatch(comicsLoading(true));
-    let intLimit = (isAutoComplete ? 6 : 20)
+    let intLimit = (isAutoComplete ? DefaultPaginationConsts.autocompletePageSize : DefaultPaginationConsts.defaultPageSize)
 
     // you need a new time stamp for every request                                                                                    
     let ts = new Date().getTime();
@@ -17,9 +18,9 @@ export const fetchComics = (pageNumber, comicTitle, comicFormat, issueNumber, fi
         offset: (pageNumber * intLimit), 
         limit: intLimit
     };
-    if (comicTitle) params.titleStartsWith = comicTitle;
-    if (comicFormat) params.formatType = comicFormat;
-    if (issueNumber) params.issueNumber = issueNumber;
+    if (comicTitleFilter) params.titleStartsWith = comicTitleFilter;
+    if (comicFormatFilter) params.formatType = comicFormatFilter;
+    if (issueNumberFilter) params.issueNumber = issueNumberFilter;
     if (filterByIssueNumber) params.orderBy = filterByIssueNumber;
 
     apiUrl.search = new URLSearchParams(params).toString();
@@ -43,10 +44,12 @@ export const fetchComics = (pageNumber, comicTitle, comicFormat, issueNumber, fi
             .then(response => response.json())
             .then(comics => {
                 if (comics?.data?.results) {
-                    if (!isAutoComplete)
-                        dispatch(addComics(comics.data.results, comics.data.total, comicTitle, comicFormat, issueNumber));
-                    else
-                        dispatch(addComicsForAutoComplete(comics.data.results, comicTitle, comicFormat, issueNumber));
+                    if (!isAutoComplete) {
+                        let arrTmp = comics.data.results.filter((item, index) => !comicsState.some(itemstt => itemstt.id === item.id));
+                        dispatch(addComics(arrTmp, comics.data.total));
+                    } else {
+                        dispatch(addComicsForAutoComplete(comics.data.results, comicTitleFilter, comicFormatFilter, issueNumberFilter));
+                    }
                 }
             })
             .catch(error => dispatch(comicsFailed(error.message)));
@@ -85,7 +88,6 @@ export const fetchComicById = (comicId) => (dispatch) => {
             .then(response => response.json())
             .then(comic => {
                 if (comic?.data?.results) {
-                    console.log(comic.data.results[0]);
                     dispatch(addComicById(comic.data.results[0]));
                 }
             })
@@ -102,8 +104,8 @@ export const fetchCharactersByComicId = (pageNumber, comicId) => (dispatch) => {
     let params = { 
         apikey: PUBLIC_KEY, 
         hash: hash,
-        offset: (pageNumber * 3), 
-        limit: 3
+        offset: (pageNumber * DefaultPaginationConsts.tablePageSize), 
+        limit: DefaultPaginationConsts.tablePageSize
     };
 
     apiUrl.search = new URLSearchParams(params).toString();
@@ -143,8 +145,8 @@ export const fetchStoriesByComicId = (pageNumber, comicId) => (dispatch) => {
     let params = { 
         apikey: PUBLIC_KEY, 
         hash: hash,
-        offset: (pageNumber * 3), 
-        limit: 3
+        offset: (pageNumber * DefaultPaginationConsts.tablePageSize), 
+        limit: DefaultPaginationConsts.tablePageSize
     };
 
     apiUrl.search = new URLSearchParams(params).toString();
@@ -192,11 +194,12 @@ export const incPageNumber = () => ({
     type: ActionTypes.COMICS_INCREMENT_PAGE_NUMBER
 });
 
-export const setComicFilters = (comicTitle, comicFormat, issueNumber) => ({
+export const setComicFilters = (comicTitleFilter, comicFormatFilter, issueNumberFilter, orderByIssueNumber) => ({
     type: ActionTypes.COMICS_SET_FILTERS,
-    comicTitle: comicTitle,
-    comicFormat: comicFormat,
-    issueNumber: issueNumber,
+    comicTitleFilter: comicTitleFilter,
+    comicFormatFilter: comicFormatFilter,
+    issueNumberFilter: issueNumberFilter,
+    orderByIssueNumber: orderByIssueNumber,
     pageNumber: 0
 });
 
@@ -204,21 +207,18 @@ export const comicsLoading = () => ({
     type: ActionTypes.COMICS_LOADING
 });
 
-export const addComics = (comics, total, comicTitle, comicFormat, issueNumber) => ({
+export const addComics = (comics, total) => ({
     type: ActionTypes.COMICS_ADD,
     payload: comics,
     totalComics: total,
-    comicTitle: comicTitle,
-    comicFormat: comicFormat,
-    issueNumber: issueNumber
 });
 
-export const addComicsForAutoComplete = (comics, comicTitle, comicFormat, issueNumber) => ({
+export const addComicsForAutoComplete = (comics, comicTitleFilter, comicFormatFilter, issueNumberFilter) => ({
     type: ActionTypes.COMICS_ADD_SEARCH,
     payload: comics,
-    comicTitle: comicTitle,
-    comicFormat: comicFormat,
-    issueNumber: issueNumber
+    comicTitleFilter: comicTitleFilter,
+    comicFormatFilter: comicFormatFilter,
+    issueNumberFilter: issueNumberFilter
 });
 
 export const addComicById = (comic) => ({

@@ -1,12 +1,11 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
-import { Grid, Card, Image, Header } from "semantic-ui-react";
+import { Grid, Header } from "semantic-ui-react";
 import NavMenu from "../../NavMenu/NavMenu";
-import CharactersBanner from "./../CharactersBanner";
+import CharactersBanner from "./../Banner/CharactersBanner";
 import { setActiveMenu } from '../../../redux/NavMenu/navmenuActionCreators';
 import * as MenuOptions from '../../../data/navmenuOptions';
-import NoData from "../../Utils/NoDataComponent";
+import NoDataFound from "../../Utils/NoDataFoundComponent";
 import NoMoreData from "../../Utils/NoMoreDataComponent";
 import CharacterFavoriteCard from './CharacterFavoriteCard';
 
@@ -47,8 +46,8 @@ function CharactersFavorites(props) {
                     }
                 </Grid.Row>
                 <Grid.Row>
-                    <NoData show={charactersFavorites.length === 0} />
-                    <NoMoreData show={charactersFavorites.length > 0} />
+                    <NoDataFound showif={charactersFavorites.length === 0} />
+                    <NoMoreData showif={charactersFavorites.length > 0} />
                 </Grid.Row>
             </Grid>
         </React.Fragment>

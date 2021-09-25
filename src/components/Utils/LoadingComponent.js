@@ -1,7 +1,7 @@
 import React from 'react';
 import { Icon } from 'semantic-ui-react';
 
-export const Loading = ({show}) => {
+export const Loading = ({showif}) => {
     const styleContainer = {
         zIndex: 899, 
         paddingTop: '4em',
@@ -10,7 +10,7 @@ export const Loading = ({show}) => {
 
     return(
         <React.Fragment>
-            {show &&
+            {showif &&
                 <div style={styleContainer}>
                     <Icon loading name='spinner' size='big' />
                     <p>Loading...</p>
