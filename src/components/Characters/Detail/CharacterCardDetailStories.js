@@ -45,13 +45,14 @@ function CharacterCardDetailStories({character, stories, storiesTotalPages}) {
                             stories &&
                             stories.map((story, index) => {
                                 let srcImage = `${story?.thumbnail?.path}.${story?.thumbnail?.extension}`;
+                                if (srcImage.indexOf('image_not_available')>=0) srcImage = '/images/ImageNotFound.jpg';
                                 return (
                                     <Grid.Row key={story.id}>
                                         <Grid.Column width={4}>
                                             {
                                                 (srcImage === null || srcImage === "" || srcImage === undefined || srcImage === "undefined.undefined")
                                                     ?
-                                                    <Image src="/images/no-img.png" size="tiny" />
+                                                    <Image src="/images/ImageNotFound.jpg" size="tiny" />
                                                     :
                                                     <Image src={srcImage} size="tiny" />
 

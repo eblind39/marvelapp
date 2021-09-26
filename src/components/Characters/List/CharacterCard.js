@@ -8,6 +8,7 @@ function CharacterCard({character, charactersFavorites}) {
     const [isCharacterInFavs, setIsCharacterInFavs] = useState(false);
     const dispatch = useDispatch();
     let srcImage = `${ character.thumbnail.path }.${ character.thumbnail.extension }`;
+    if (srcImage.indexOf('image_not_available')>=0) srcImage = '/images/ImageNotFound.jpg';
 
     const toggleFavorites = function() {
         if (!isCharacterInFavs) {

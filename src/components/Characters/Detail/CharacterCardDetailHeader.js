@@ -5,6 +5,7 @@ import { useHistory } from "react-router";
 function CharacterCardDetailHeader({character}) {
     const history = useHistory();
     let srcImage = `${ character?.thumbnail?.path }.${ character?.thumbnail?.extension }`;
+    if (srcImage.indexOf('image_not_available')>=0) srcImage = '/images/ImageNotFound.jpg';
 
     return(
         <Grid

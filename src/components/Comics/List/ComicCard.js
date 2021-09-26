@@ -8,6 +8,7 @@ function ComicCard({comic, comicsFavorites}) {
     const [isComicInFavs, setIsComicInFavs] = useState(false);
     const dispatch = useDispatch();
     let srcImage = `${ comic.thumbnail.path }.${ comic.thumbnail.extension }`;
+    if (srcImage.indexOf('image_not_available')>=0) srcImage = '/images/ImageNotFound.jpg';
 
     const toggleFavorites = function() {
         if (!isComicInFavs) {

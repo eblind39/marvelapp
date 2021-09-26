@@ -47,6 +47,7 @@ function CharacterCardDetailComics({character, comics, comicsTotalPages}) {
                             comics &&
                             comics.map((comic, index) => {
                                 let srcImage = `${comic?.thumbnail?.path}.${comic?.thumbnail?.extension}`;
+                                if (srcImage.indexOf('image_not_available')>=0) srcImage = '/images/ImageNotFound.jpg';
                                 return (
                                     <Grid.Row key={comic.id}>
                                         <Grid.Column width={4}>

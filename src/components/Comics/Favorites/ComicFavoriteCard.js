@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 
 function ComicFavoriteCard({comic}) {
     let srcImage = `${ comic.thumbnail.path }.${ comic.thumbnail.extension }`;
+    if (srcImage.indexOf('image_not_available')>=0) srcImage = '/images/ImageNotFound.jpg';
 
     return (
         <Card className="comic-card-default-height" style={{marginBottom: "30px"}}>

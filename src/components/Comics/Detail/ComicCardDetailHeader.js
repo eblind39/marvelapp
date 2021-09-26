@@ -6,6 +6,7 @@ function ComicCardDetailHeader({comic}) {
     const history = useHistory();
 
     let srcImage = `${ comic?.thumbnail?.path }.${ comic?.thumbnail?.extension }`;
+    if (srcImage.indexOf('image_not_available')>=0) srcImage = '/images/ImageNotFound.jpg';
 
     return (
         <Grid

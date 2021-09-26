@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 
 function CharacterFavoriteCard({character}) {
     let srcImage = `${ character.thumbnail.path }.${ character.thumbnail.extension }`;
+    if (srcImage.indexOf('image_not_available')>=0) srcImage = '/images/ImageNotFound.jpg';
 
     return (
         <Card className="character-card-default-height" style={{marginBottom: "30px"}}>
